@@ -65,9 +65,9 @@ export const tabs = [
     label: "VibeCoding",
     eyebrow: "Project Gallery",
     kicker: "Curated links and project showcases",
-    title: "用 Gallery 方式呈现 VibeCoding 项目分享。",
+    title: "教学中的AI项目分享",
     description:
-      "把项目链接、实验作品、交互 Demo 与构建说明整理成一个轻量但有气质的展示空间，让项目本身成为网站的核心看点。",
+      "AI编程项目、数字化学习工具、AI赋能的学习新体验分享。",
     spotlight:
       "这一板块更像一个持续生长的项目画廊，适合放置作品链接、Demo 入口、GitHub 地址和一句简洁的项目说明。",
     stats: [
@@ -78,15 +78,15 @@ export const tabs = [
     highlights: ["项目 Gallery", "Demo 入口", "构建说明"],
     cards: [
       createCard({
-        title: "Prompt-to-Site 视觉实验",
-        tag: "Web Demo",
+        title: "水质检测记录工具",
+        tag: "Web App Demo",
         summary:
-          "一个从提示词直接生成网页概念稿的实验项目，页面中收录了在线预览、设计迭代记录与源代码地址。",
+          "中学生科学实验数据记录与管理",
         meta: "Live Demo",
         hrefLabel: "打开项目",
         noteTitle: "项目说明",
         note:
-          "这里适合写项目目标、Demo 入口、GitHub 地址、版本更新说明，以及你希望读者先看的重点。",
+          "[水质检测工具](https://wrjqxzky8g.coze.site/)",
       }),
     ],
   },
@@ -108,15 +108,15 @@ export const tabs = [
     highlights: ["方法文章", "专题写作", "阅读索引"],
     cards: [
       createCard({
-        title: "AI 会如何改变教师备课流程？",
+        title: "不焦虑，也不躺平，我想和你一起聊聊AI时代的教育？",
         tag: "专题文章",
         summary:
-          "围绕备课场景展开，从信息搜集、活动设计到作业反馈，梳理 AI 进入教学流程后的真实变化。",
+          "[三棵人教育社区启动]",
         meta: "8 min read",
         hrefLabel: "开始阅读",
         noteTitle: "文章导读",
         note:
-          "这里适合补充文章的核心观点、阅读建议、摘要结构，或者放正文链接与延伸阅读入口。",
+          "[不焦虑，也不躺平，我想和你一起聊聊AI时代的教育](https://mp.weixin.qq.com/s/fv65kkInurM3dSMZrm1ciQ)",
       }),
     ],
   },
