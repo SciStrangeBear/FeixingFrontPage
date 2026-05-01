@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 
 const NAV_ITEMS = [
   { label: "首页", hasDropdown: false },
