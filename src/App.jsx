@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef } from "react";
 
 const NAV_ITEMS = [
   { label: "首页", hasDropdown: false },
@@ -48,35 +48,40 @@ const COMMUNITY_SESSIONS = [
     series: "三棵人 AI 教育探索第 5 期",
     title: "教师如何用 AI 提效：从 Vibe Coding 到 Skill+Agent 案例分享",
     date: "2026.5.1",
-    desc: "零基础也能让 AI 替你干活：三位教师分享如何用 AI 工具提升工作效率，涵盖智能体开发、签证查询系统、个性化学习平台与办公自动化实战案例。",
+    desc: "案例如下：用扣子搭建留学申请引导 Agent；用Qoder搭建学生签证信息查询网站；用 Cursor 开发小学语文个性化学习系统；用 WorkBuddy + TRAE 实操「国旗打印 Skill」，演示 Agent + Skill 办公自动化",
+    thumbnail: "https://i2.hdslb.com/bfs/archive/3d0b5dabf878bd73dcc52bc1e8b3267b55829d4a.jpg",
     url: "https://www.bilibili.com/video/BV1sbRKBFEqS/?vd_source=56d2df97d35fd0e11523af88d7d403ae",
   },
   {
     series: "三棵人 AI 教育探索第 4 期",
     title: "Vibe Coding 初体验",
     date: "2026.4.16",
-    desc: "通过 Vibe Coding 体验 AI 辅助编程，探索 AI 时代教育者的新可能。",
+    desc: "主讲人天昱从零基础视角出发，带你了解 Vibe Coding（氛围编程 / AI编程）是什么、跟教育者有什么关系，并通过多个真实案例展示 AI 编程在教学和工作中的落地方式。",
+    thumbnail: "https://i2.hdslb.com/bfs/archive/09c357061f249c77b30545f3919a42b838793d27.jpg",
     url: "https://www.bilibili.com/video/BV1H3daBhEVh/?vd_source=56d2df97d35fd0e11523af88d7d403ae",
   },
   {
     series: "三棵人 AI 教育探索第 3 期",
     title: "用 Notion AI 搭建课程",
     date: "2026.4.2",
-    desc: "实操演示如何借助 Notion AI 高效设计与管理课程内容。",
+    desc: "独立小学阅读与写作老师顾惜，分享她如何将Notion AI融入日常教学：素材管理与课程搭建；AI辅助批改学生作品；AI写作的边界讨论；教师自我提升。",
+    thumbnail: "https://i1.hdslb.com/bfs/archive/e3949b253ecb68dadc04982696f33cb3b4da3f94.jpg",
     url: "https://www.bilibili.com/video/BV1m99NBFEff/?vd_source=56d2df97d35fd0e11523af88d7d403ae",
   },
   {
     series: "三棵人 AI 教育探索第 2 期",
     title: "AI Foundations 2：AI 伦理",
     date: "2026.3.19",
-    desc: "探讨 AI 伦理的核心议题，帮助教育者建立负责任的 AI 使用框架。",
+    desc: "三棵人AI教育社群第2场线上分享，承接第一期AI技术原理，继续探讨AI伦理问题和对教育的影响。本期主要内容：AI幻觉、AI偏见、数据隐私与安全、AI对教师职业的影响；以及AI开放麦：语音输入+深度对话、构建教学知识库。",
+    thumbnail: "https://i1.hdslb.com/bfs/archive/ca3de4a6c409621ac562d81ebd3db90a3d5c999e.jpg",
     url: "https://www.bilibili.com/video/BV1KaAjz7E5g/?vd_source=56d2df97d35fd0e11523af88d7d403ae",
   },
   {
     series: "三棵人 AI 教育探索第 1 期",
     title: "AI Foundations 1：AI 的工作原理",
     date: "2026.3.12",
-    desc: "教育者需要知道的 AI 通识：AI 基本原理与大语言模型的工作方式。",
+    desc: "三棵人AI教育社群第1场线上分享，面向技术小白讲解AI基础原理：AI是如何工作的、大语言模型的运作方式，以及Token划分、LLM可视化等实用工具演示。",
+    thumbnail: "https://i0.hdslb.com/bfs/archive/fd4a028b3a3be93ff459daca0f3a8f242dae5f97.jpg",
     url: "https://www.bilibili.com/video/BV1utcSz3EQp/?vd_source=56d2df97d35fd0e11523af88d7d403ae",
   },
 ];
@@ -301,66 +306,16 @@ function PlaceholderPage({ title, onNavigate }) {
 }
 
 // ─── 资源库页面 ───────────────────────────────────────────
-function extractBvid(url) {
-  const m = url.match(/\/video\/(BV\w+)/);
-  return m ? m[1] : null;
-}
-
 function SessionCard({ session }) {
-  const [info, setInfo] = useState(null);
-  const [editing, setEditing] = useState(false);
-  const bvid = extractBvid(session.url);
-  const storageKey = `desc_${bvid}`;
-
-  const [customDesc, setCustomDesc] = useState(
-    () => localStorage.getItem(storageKey) ?? ""
-  );
-  const [draft, setDraft] = useState("");
-
-  useEffect(() => {
-    if (!bvid) return;
-    fetch(`/bili-api/x/web-interface/view?bvid=${bvid}`)
-      .then((r) => r.json())
-      .then((json) => {
-        if (json.code === 0) {
-          setInfo({
-            pic: json.data.pic.replace("http://", "https://"),
-            desc: json.data.desc,
-          });
-        }
-      })
-      .catch(() => {});
-  }, [bvid]);
-
-  const startEdit = (e) => {
-    e.preventDefault();
-    setDraft(customDesc || info?.desc || session.desc || "");
-    setEditing(true);
-  };
-
-  const save = (e) => {
-    e.preventDefault();
-    localStorage.setItem(storageKey, draft);
-    setCustomDesc(draft);
-    setEditing(false);
-  };
-
-  const cancel = (e) => {
-    e.preventDefault();
-    setEditing(false);
-  };
-
-  const displayDesc = customDesc || info?.desc || session.desc || "";
-
   return (
     <div className="group bg-white border border-[#e8e4df] rounded-2xl overflow-hidden hover:border-[#c4b5fd] hover:shadow-md transition-all flex flex-col">
       {/* 封面 */}
       <a href={session.url} target="_blank" rel="noreferrer" className="block relative aspect-video bg-[#ede9fe] shrink-0">
-        {info?.pic ? (
-          <img src={info.pic} alt={session.title} referrerPolicy="no-referrer" className="w-full h-full object-cover" />
+        {session.thumbnail ? (
+          <img src={session.thumbnail} alt={session.title} referrerPolicy="no-referrer" className="w-full h-full object-cover" />
         ) : (
           <div className="w-full h-full flex items-center justify-center">
-            <span className="text-[#c4b5fd] text-4xl animate-pulse">▶</span>
+            <span className="text-[#c4b5fd] text-4xl">▶</span>
           </div>
         )}
         <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors flex items-center justify-center">
@@ -381,29 +336,9 @@ function SessionCard({ session }) {
             {session.title}
           </h3>
         </a>
-
-        {/* 简介区 */}
-        <div className="mt-3 flex-1">
-          {editing ? (
-            <div>
-              <textarea
-                value={draft}
-                onChange={(e) => setDraft(e.target.value)}
-                className="w-full text-[12px] text-[#1a1a2e] leading-relaxed border border-[#c4b5fd] rounded-lg p-2.5 resize-none focus:outline-none focus:ring-2 focus:ring-[#c4b5fd]"
-                rows={6}
-                autoFocus
-              />
-              <div className="flex gap-2 mt-2">
-                <button onClick={save} className="px-4 py-1.5 rounded-full bg-[#6d28d9] text-white text-[12px] font-semibold hover:bg-[#5b21b6] transition-colors">保存</button>
-                <button onClick={cancel} className="px-4 py-1.5 rounded-full border border-[#d4cfc8] text-[12px] text-[#6b6b7b] hover:bg-[#f4f1eb] transition-colors">取消</button>
-              </div>
-            </div>
-          ) : (
-            <p className="text-[12px] text-[#6b6b7b] leading-relaxed">
-              {displayDesc}
-            </p>
-          )}
-        </div>
+        <p className="mt-3 text-[12px] text-[#6b6b7b] leading-relaxed">
+          {session.desc}
+        </p>
       </div>
     </div>
   );
