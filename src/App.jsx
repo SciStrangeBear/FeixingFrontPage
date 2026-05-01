@@ -56,7 +56,7 @@ const COMMUNITY_SESSIONS = [
     series: "三棵人 AI 教育探索第 4 期",
     title: "Vibe Coding 初体验",
     date: "2026.4.16",
-    desc: "主讲人天昱从零基础视角出发，带你了解 Vibe Coding（氛围编程 / AI编程）是什么、跟教育者有什么关系，并通过多个真实案例展示 AI 编程在教学和工作中的落地方式。",
+    desc: "主讲人天晗从零基础视角出发，带你了解 Vibe Coding（氛围编程 / AI编程）是什么、跟教育者有什么关系，并通过多个真实案例展示 AI 编程在教学和工作中的落地方式。",
     thumbnail: "https://i2.hdslb.com/bfs/archive/09c357061f249c77b30545f3919a42b838793d27.jpg",
     url: "https://www.bilibili.com/video/BV1H3daBhEVh/?vd_source=56d2df97d35fd0e11523af88d7d403ae",
   },
