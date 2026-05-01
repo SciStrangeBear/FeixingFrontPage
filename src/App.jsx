@@ -47,7 +47,7 @@ const COMMUNITY_SESSIONS = [
   {
     series: "三棵人 AI 教育探索第 5 期",
     title: "教师如何用 AI 提效：从 Vibe Coding 到 Skill+Agent 案例分享",
-    date: "2026.5.1",
+    date: "2026.4.30",
     desc: "案例如下：用扣子搭建留学申请引导 Agent；用Qoder搭建学生签证信息查询网站；用 Cursor 开发小学语文个性化学习系统；用 WorkBuddy + TRAE 实操「国旗打印 Skill」，演示 Agent + Skill 办公自动化",
     thumbnail: "https://i2.hdslb.com/bfs/archive/3d0b5dabf878bd73dcc52bc1e8b3267b55829d4a.jpg",
     url: "https://www.bilibili.com/video/BV1sbRKBFEqS/?vd_source=56d2df97d35fd0e11523af88d7d403ae",
