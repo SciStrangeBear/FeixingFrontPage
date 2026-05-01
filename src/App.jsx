@@ -148,9 +148,9 @@ function Hero({ onNavigate }) {
   return (
     <section className="bg-[#faf9f6] px-6 pt-36 pb-20 sm:px-10 lg:px-14">
       <div className="mx-auto max-w-[1440px]">
-        <h1 className="font-extrabold text-[#1a1a2e] tracking-[-0.02em] leading-none w-fit">
-          <div className="text-5xl md:text-6xl lg:text-[68px] whitespace-nowrap">给教育者和学生的</div>
-          <div className="text-[80px] md:text-[100px] lg:text-[112px] whitespace-nowrap mt-3">AI 素养教育</div>
+        <h1 className="font-extrabold text-[#1a1a2e] tracking-[-0.02em] leading-none">
+          <div className="text-[36px] sm:text-5xl md:text-6xl lg:text-[68px]">给教育者和学生的</div>
+          <div className="text-[52px] sm:text-[80px] md:text-[100px] lg:text-[112px] mt-2 sm:mt-3">AI 素养教育</div>
         </h1>
         <p className="mt-7 text-[#6b6b7b] text-lg md:text-xl max-w-2xl leading-relaxed">
           探索 AI 时代教育的更多可能
@@ -172,8 +172,14 @@ function Hero({ onNavigate }) {
 }
 
 function PhotoStrip() {
+  const getVisible = () => {
+    if (window.innerWidth < 640) return 1;
+    if (window.innerWidth < 1024) return 2;
+    return 3;
+  };
+
   const [offset, setOffset] = useState(0);
-  const visible = 3;
+  const [visible, setVisible] = useState(getVisible);
   const max = PHOTOS.length - visible;
   const containerRef = useRef(null);
   const lockRef = useRef(false);
@@ -181,6 +187,16 @@ function PhotoStrip() {
 
   const prev = () => setOffset((o) => Math.max(0, o - 1));
   const next = () => setOffset((o) => Math.min(max, o + 1));
+
+  useEffect(() => {
+    const onResize = () => {
+      const v = getVisible();
+      setVisible(v);
+      setOffset((o) => Math.min(o, PHOTOS.length - v));
+    };
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+  }, []);
 
   useEffect(() => {
     const el = containerRef.current;
