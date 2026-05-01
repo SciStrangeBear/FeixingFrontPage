@@ -156,17 +156,14 @@ function Hero({ onNavigate }) {
           探索 AI 时代教育的更多可能
         </p>
         <div className="mt-10 flex flex-wrap gap-4">
-          <button onClick={() => onNavigate("teachers")} className="rounded-full bg-[#6d28d9] px-8 py-3.5 text-[14px] font-semibold text-white hover:bg-[#5b21b6] transition-colors">
-            探索教师服务 →
+          <button onClick={() => onNavigate("resources")} className="rounded-full bg-[#6d28d9] px-8 py-3.5 text-[14px] font-semibold text-white hover:bg-[#5b21b6] transition-colors">
+            查看资源库
+          </button>
+          <button onClick={() => onNavigate("teachers")} className="rounded-full border border-[#d4cfc8] px-8 py-3.5 text-[14px] font-semibold text-[#6b6b7b] hover:bg-[#eeeae4] hover:text-[#1a1a2e] transition-colors">
+            探索教师服务
           </button>
           <button onClick={() => onNavigate("students")} className="rounded-full border border-[#d4cfc8] px-8 py-3.5 text-[14px] font-semibold text-[#6b6b7b] hover:bg-[#eeeae4] hover:text-[#1a1a2e] transition-colors">
             查看学生课程
-          </button>
-          <button
-            onClick={() => onNavigate("resources")}
-            className="rounded-full border border-[#d4cfc8] px-8 py-3.5 text-[14px] font-semibold text-[#6b6b7b] hover:bg-[#eeeae4] hover:text-[#1a1a2e] transition-colors"
-          >
-            查看资源库
           </button>
         </div>
       </div>
