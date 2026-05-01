@@ -1,390 +1,167 @@
-import { AnimatePresence, motion } from "framer-motion";
-import { useMemo, useState } from "react";
-import { tabs } from "./data";
+import { useState, useRef, useEffect } from "react";
 
-const shellTransition = { duration: 0.55, ease: [0.22, 1, 0.36, 1] };
-
-const listVariants = {
-  hidden: {},
-  visible: {
-    transition: {
-      staggerChildren: 0.08,
-      delayChildren: 0.08,
-    },
-  },
-  exit: {
-    transition: {
-      staggerChildren: 0.04,
-      staggerDirection: -1,
-    },
-  },
-};
-
-const cardVariants = {
-  hidden: {
-    opacity: 0,
-    y: 28,
-    filter: "blur(10px)",
-  },
-  visible: {
-    opacity: 1,
-    y: 0,
-    filter: "blur(0px)",
-    transition: {
-      duration: 0.65,
-      ease: [0.22, 1, 0.36, 1],
-    },
-  },
-  exit: {
-    opacity: 0,
-    y: -14,
-    transition: {
-      duration: 0.24,
-      ease: "easeInOut",
-    },
-  },
-};
-
-const galleryVisuals = [
-  "from-[#d8c1a8] via-[#f1e4d2] to-[#f9f5ee]",
-  "from-[#4b5c78] via-[#cfd8e4] to-[#f5f3ef]",
-  "from-[#9fb6aa] via-[#dbe6de] to-[#faf8f4]",
-  "from-[#a96f52] via-[#ead7c7] to-[#faf6f0]",
-  "from-[#7a8188] via-[#d9ddd9] to-[#fbfaf7]",
-  "from-[#7a5347] via-[#d2b09a] to-[#f5eee7]",
+const NAV_ITEMS = [
+  { label: "首页", hasDropdown: false },
+  { label: "教师服务", hasDropdown: true },
+  { label: "学生课程", hasDropdown: true },
+  { label: "资源库", hasDropdown: true },
+  { label: "关于我们", hasDropdown: false },
 ];
 
-function renderRichText(text) {
-  const markdownLinkPattern = /\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g;
-  const urlPattern = /(https?:\/\/[^\s]+)/g;
+const PHOTOS = [
+  { src: "/photo1.jpg", alt: "教师工作坊" },
+  { src: "/photo2.jpg", alt: "教师培训课堂" },
+  { src: "/photo3.jpg", alt: "学生课堂" },
+  { src: "/photo4.jpg", alt: "社区活动" },
+  { src: "/photo5.jpg", alt: "学生协作" },
+  { src: "/photo6.jpg", alt: "课堂讲解" },
+];
 
-  return text.split("\n").map((paragraph, paragraphIndex) => {
-    const nodes = [];
-    let lastIndex = 0;
-    const combinedPattern = new RegExp(
-      `${markdownLinkPattern.source}|${urlPattern.source}`,
-      "g",
-    );
+const SERVICES = [
+  {
+    symbol: "✦",
+    title: "教师服务",
+    desc: "AI 工具培训、备课辅助、课堂设计工作坊。帮助教师在 AI 时代找到实用的方法与节奏，持续成长。",
+    cta: "了解教师服务 →",
+    page: "teachers",
+  },
+  {
+    symbol: "◈",
+    title: "学生课程",
+    desc: "面向 K12 学生的 AI 素养课程体系。从入门到进阶，培养批判性思维与面向未来的学习能力。",
+    cta: "查看学生课程 →",
+    page: "students",
+  },
+  {
+    symbol: "▦",
+    title: "资源库",
+    desc: "精选 AI 教育工具、教学模板、研究报告与实践案例。持续更新，开放共享，随时取用。",
+    cta: "进入资源库 →",
+    page: "resources",
+  },
+];
 
-    for (const match of paragraph.matchAll(combinedPattern)) {
-      const [fullMatch, markdownText, markdownUrl, plainUrl] = match;
-      const start = match.index ?? 0;
+// ─── 资源库数据 ───────────────────────────────────────────
+// 在这里添加教育者社群线上分享的视频回放
+const COMMUNITY_SESSIONS = [
+  {
+    series: "三棵人 AI 教育探索第 5 期",
+    title: "教师如何用 AI 提效：从 Vibe Coding 到 Skill+Agent 案例分享",
+    date: "2026.5.1",
+    desc: "零基础也能让 AI 替你干活：三位教师分享如何用 AI 工具提升工作效率，涵盖智能体开发、签证查询系统、个性化学习平台与办公自动化实战案例。",
+    url: "https://www.bilibili.com/video/BV1sbRKBFEqS/?vd_source=56d2df97d35fd0e11523af88d7d403ae",
+  },
+  {
+    series: "三棵人 AI 教育探索第 4 期",
+    title: "Vibe Coding 初体验",
+    date: "2026.4.16",
+    desc: "通过 Vibe Coding 体验 AI 辅助编程，探索 AI 时代教育者的新可能。",
+    url: "https://www.bilibili.com/video/BV1H3daBhEVh/?vd_source=56d2df97d35fd0e11523af88d7d403ae",
+  },
+  {
+    series: "三棵人 AI 教育探索第 3 期",
+    title: "用 Notion AI 搭建课程",
+    date: "2026.4.2",
+    desc: "实操演示如何借助 Notion AI 高效设计与管理课程内容。",
+    url: "https://www.bilibili.com/video/BV1m99NBFEff/?vd_source=56d2df97d35fd0e11523af88d7d403ae",
+  },
+  {
+    series: "三棵人 AI 教育探索第 2 期",
+    title: "AI Foundations 2：AI 伦理",
+    date: "2026.3.19",
+    desc: "探讨 AI 伦理的核心议题，帮助教育者建立负责任的 AI 使用框架。",
+    url: "https://www.bilibili.com/video/BV1KaAjz7E5g/?vd_source=56d2df97d35fd0e11523af88d7d403ae",
+  },
+  {
+    series: "三棵人 AI 教育探索第 1 期",
+    title: "AI Foundations 1：AI 的工作原理",
+    date: "2026.3.12",
+    desc: "教育者需要知道的 AI 通识：AI 基本原理与大语言模型的工作方式。",
+    url: "https://www.bilibili.com/video/BV1utcSz3EQp/?vd_source=56d2df97d35fd0e11523af88d7d403ae",
+  },
+];
 
-      if (start > lastIndex) {
-        nodes.push(paragraph.slice(lastIndex, start));
-      }
-
-      if (markdownText && markdownUrl) {
-        nodes.push(
-          <a
-            key={`${paragraphIndex}-${start}`}
-            href={markdownUrl}
-            target="_blank"
-            rel="noreferrer"
-            className="font-medium text-[#005cba] underline decoration-[#005cba]/30 underline-offset-4 transition-colors hover:text-[#004e9f]"
-          >
-            {markdownText}
-          </a>,
-        );
-      } else if (plainUrl) {
-        nodes.push(
-          <a
-            key={`${paragraphIndex}-${start}`}
-            href={plainUrl}
-            target="_blank"
-            rel="noreferrer"
-            className="break-all font-medium text-[#005cba] underline decoration-[#005cba]/30 underline-offset-4 transition-colors hover:text-[#004e9f]"
-          >
-            {plainUrl}
-          </a>,
-        );
-      }
-
-      lastIndex = start + fullMatch.length;
-    }
-
-    if (lastIndex < paragraph.length) {
-      nodes.push(paragraph.slice(lastIndex));
-    }
-
-    return (
-      <p
-        key={paragraphIndex}
-        className="text-[15px] leading-8 text-[#414753] not-last:mb-4"
-      >
-        {nodes}
-      </p>
-    );
-  });
-}
-
-function buildCardHref(sectionId, title) {
-  const params = new URLSearchParams({
-    section: sectionId,
-    card: title,
-  });
-
-  return `/?${params.toString()}`;
-}
-
-function findCardFromLocation() {
-  const params = new URLSearchParams(window.location.search);
-  const sectionId = params.get("section");
-  const cardTitle = params.get("card");
-
-  if (!sectionId || !cardTitle) {
-    return null;
-  }
-
-  const section = tabs.find((item) => item.id === sectionId);
-
-  if (!section) {
-    return null;
-  }
-
-  const card = section.cards.find((item) => item.title === cardTitle);
-
-  if (!card) {
-    return null;
-  }
-
-  return { section, card };
-}
-
-function Header({ activeTab, onChange }) {
+// ─── 图标 ─────────────────────────────────────────────────
+function StarIcon({ size = 28 }) {
   return (
-    <header className="fixed inset-x-0 top-0 z-50 px-5 pt-5 sm:px-8 lg:px-12">
-      <nav className="mx-auto flex w-full max-w-[1440px] flex-wrap items-center justify-between gap-4 rounded-[2rem] bg-white/72 px-5 py-4 shadow-[0_8px_30px_rgba(27,27,29,0.04)] backdrop-blur-[30px] sm:px-6">
-        <div className="flex items-baseline gap-3">
-          <div className="bg-[linear-gradient(135deg,#1b1b1d_0%,#005cba_55%,#6b88b6_100%)] bg-clip-text text-2xl font-black tracking-[0.08em] text-transparent [text-shadow:0_10px_30px_rgba(0,92,186,0.08)]">
-            飞星计划
-          </div>
-          <div className="hidden text-[10px] font-bold uppercase tracking-[0.24em] text-[#8b9099] sm:block">
-            Feixing Project
-          </div>
-        </div>
+    <svg width={size} height={size} viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="ps1" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stopColor="#a78bfa" />
+          <stop offset="100%" stopColor="#6d28d9" />
+        </linearGradient>
+      </defs>
+      <line x1="20" y1="54" x2="4" y2="64" stroke="#a78bfa" strokeWidth="2.5" strokeLinecap="round" />
+      <line x1="17" y1="60" x2="5" y2="67" stroke="#a78bfa" strokeWidth="1.5" strokeLinecap="round" opacity="0.5" />
+      <polygon points="42,6 51,30 76,30 55,47 63,72 42,57 21,72 29,47 8,30 33,30" fill="url(#ps1)" />
+      <circle cx="73" cy="13" r="2" fill="#a78bfa" opacity="0.8" />
+      <circle cx="13" cy="36" r="1.8" fill="#c4b5fd" opacity="0.7" />
+    </svg>
+  );
+}
 
-        <div className="order-3 flex w-full min-w-0 items-center gap-2 overflow-x-auto pb-1 md:order-2 md:w-auto md:flex-1 md:justify-center md:overflow-visible md:pb-0">
-          {tabs.map((tab) => {
-            const isActive = tab.id === activeTab;
+// ─── 导航栏 ───────────────────────────────────────────────
+function Header({ onNavigate }) {
+  return (
+    <header className="fixed inset-x-0 top-0 z-50 bg-[#faf9f6]/95 backdrop-blur-md border-b border-[#e8e4df]">
+      <nav className="mx-auto flex max-w-[1440px] items-center justify-between px-6 py-3.5 sm:px-10 lg:px-14">
+        <button onClick={() => onNavigate("home")} className="flex items-center gap-2.5">
+          <StarIcon size={26} />
+          <span className="text-[17px] font-black tracking-tight text-[#1a1a2e]">飞星计划 AI 教育</span>
+        </button>
 
+        <div className="hidden md:flex items-center gap-0.5">
+          {NAV_ITEMS.map((item) => {
+            const pageMap = { "首页": "home", "教师服务": "teachers", "学生课程": "students", "资源库": "resources", "关于我们": "about" };
             return (
               <button
-                key={tab.id}
+                key={item.label}
                 type="button"
-                onClick={() => onChange(tab.id)}
-                className="relative shrink-0 rounded-full px-5 py-2.5"
+                onClick={() => onNavigate(pageMap[item.label])}
+                className="px-4 py-2 text-[13px] font-medium text-[#6b6b7b] hover:text-[#1a1a2e] rounded-full hover:bg-[#eeeae4] transition-colors"
               >
-                {isActive && (
-                  <motion.div
-                    layoutId="active-nav-pill"
-                    className="absolute inset-0 rounded-full bg-[linear-gradient(135deg,#004e9f,#0066cc)] shadow-[0_18px_40px_rgba(0,92,186,0.18)]"
-                    transition={{ type: "spring", stiffness: 320, damping: 30 }}
-                  />
-                )}
-                <span
-                  className={`relative z-10 text-[12px] font-bold uppercase tracking-[0.08em] ${
-                    isActive
-                      ? "text-white"
-                      : "text-[#7c8089] transition-colors hover:text-[#005cba]"
-                  }`}
-                >
-                  {tab.label}
-                </span>
+                {item.label}{item.hasDropdown && " ▾"}
               </button>
             );
           })}
         </div>
 
-        <div className="order-2 flex items-center gap-4 md:order-3">
-          <div className="hidden items-center rounded-full bg-[#f6f3f5] px-4 py-2.5 lg:flex">
-            <span className="text-sm text-[#727784]">Search links, notes, articles...</span>
-          </div>
-          <button
-            type="button"
-            className="rounded-full bg-[linear-gradient(135deg,#004e9f,#0066cc)] px-6 py-2.5 text-[11px] font-bold uppercase tracking-[0.14em] text-white shadow-[0_18px_40px_rgba(0,92,186,0.18)] transition-transform active:scale-95"
-          >
-            Explore
-          </button>
-        </div>
+        <button
+          type="button"
+          onClick={() => onNavigate("contact")}
+          className="rounded-full bg-[#6d28d9] px-5 py-2.5 text-[13px] font-semibold text-white hover:bg-[#5b21b6] transition-colors"
+        >
+          联系我们
+        </button>
       </nav>
     </header>
   );
 }
 
-function HeroPanel({ tab }) {
+// ─── 主页组件 ─────────────────────────────────────────────
+function Hero({ onNavigate }) {
   return (
-    <motion.section
-      key={tab.id}
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -14 }}
-      transition={shellTransition}
-      className="max-w-4xl"
-    >
-      <p className="text-[11px] font-bold uppercase tracking-[0.28em] text-[#005cba]">
-        {tab.eyebrow}
-      </p>
-      <h1 className="mt-5 text-5xl font-extrabold tracking-[-0.04em] text-[#1b1b1d] sm:text-6xl xl:text-7xl">
-        {tab.title}
-      </h1>
-      <p className="mt-7 max-w-2xl text-lg leading-relaxed text-[#414753]">
-        {tab.description}
-      </p>
-    </motion.section>
-  );
-}
-
-function GalleryCard({ sectionId, card, index }) {
-  return (
-    <motion.a
-      href={buildCardHref(sectionId, card.title)}
-      variants={cardVariants}
-      whileHover={{
-        y: -8,
-        transition: { type: "spring", stiffness: 240, damping: 20 },
-      }}
-      whileTap={{
-        scale: 0.985,
-        transition: { type: "spring", stiffness: 420, damping: 24 },
-      }}
-      className="group flex h-full cursor-pointer flex-col"
-    >
-      <div className="relative mb-6 aspect-video overflow-hidden rounded-[1.5rem] bg-[#eae7ea]">
-        <div
-          className={`absolute inset-0 bg-linear-to-br ${galleryVisuals[index % galleryVisuals.length]}`}
-        />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_28%_24%,rgba(255,255,255,0.82),transparent_22%),linear-gradient(145deg,transparent_0%,rgba(255,255,255,0.18)_48%,rgba(27,27,29,0.05)_100%)]" />
-        <div className="absolute inset-0 flex items-center justify-center bg-black/6 transition-colors duration-500 group-hover:bg-black/14">
-          <div className="flex h-16 w-16 items-center justify-center rounded-full bg-white/40 shadow-[0_30px_60px_rgba(0,0,0,0.06)] backdrop-blur-xl transition-transform duration-500 group-hover:scale-110">
-            <div className="ml-1 h-0 w-0 border-y-[10px] border-y-transparent border-l-[15px] border-l-[#1b1b1d]" />
-          </div>
-        </div>
-        <div className="absolute right-4 bottom-4 rounded-md bg-black/58 px-3 py-1 backdrop-blur-md">
-          <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-white">
-            {card.meta}
-          </span>
-        </div>
-      </div>
-
-      <div className="flex flex-1 flex-col px-1">
-        <span className="mb-2 block text-[10px] font-bold uppercase tracking-[0.22em] text-[#005cba]">
-          {card.tag}
-        </span>
-        <h3 className="text-2xl font-bold leading-snug tracking-[-0.03em] text-[#1b1b1d] transition-colors group-hover:text-[#004e9f]">
-          {card.title}
-        </h3>
-        <p className="mt-3 flex-1 text-sm leading-7 font-medium text-[#414753]">
-          {card.summary}
+    <section className="bg-[#faf9f6] px-6 pt-36 pb-20 sm:px-10 lg:px-14">
+      <div className="mx-auto max-w-[1440px]">
+        <h1 className="font-extrabold text-[#1a1a2e] tracking-[-0.02em] leading-none w-fit">
+          <div className="text-5xl md:text-6xl lg:text-[68px] whitespace-nowrap">给教育者和学生的</div>
+          <div className="text-[80px] md:text-[100px] lg:text-[112px] whitespace-nowrap mt-3">AI 素养教育</div>
+        </h1>
+        <p className="mt-7 text-[#6b6b7b] text-lg md:text-xl max-w-2xl leading-relaxed">
+          探索 AI 时代教育的更多可能
         </p>
-        <span className="mt-5 inline-flex text-sm font-semibold text-[#005cba]">
-          {card.hrefLabel}
-        </span>
-      </div>
-    </motion.a>
-  );
-}
-
-function GallerySection({ sectionId, cards }) {
-  return (
-    <motion.section
-      variants={listVariants}
-      initial="hidden"
-      animate="visible"
-      exit="exit"
-      className="grid grid-cols-1 gap-12 md:grid-cols-2 lg:grid-cols-3"
-    >
-      {cards.map((card, index) => (
-        <GalleryCard
-          key={card.title}
-          sectionId={sectionId}
-          card={card}
-          index={index}
-        />
-      ))}
-    </motion.section>
-  );
-}
-
-function DetailPage({ section, card }) {
-  return (
-    <div className="min-h-screen bg-[#fcf8fb] text-[#1b1b1d]">
-      <header className="px-6 pt-8 sm:px-8 lg:px-12">
-        <div className="mx-auto flex max-w-[960px] items-center justify-between rounded-full bg-white/78 px-6 py-4 shadow-[0_8px_30px_rgba(27,27,29,0.04)] backdrop-blur-[30px]">
-          <a
-            href="/"
-            className="text-sm font-bold uppercase tracking-[0.12em] text-[#005cba]"
-          >
-            Back to Home
-          </a>
-          <div className="text-lg font-black tracking-[-0.04em] text-[#1b1b1d]">
-            Knowledge Gallery
-          </div>
-        </div>
-      </header>
-
-      <main className="mx-auto max-w-[960px] px-6 pt-14 pb-24 sm:px-8">
-        <div className="rounded-[2rem] bg-white px-8 py-10 shadow-[0_24px_60px_rgba(27,27,29,0.06)] sm:px-12 sm:py-14">
-          <p className="text-[11px] font-bold uppercase tracking-[0.28em] text-[#005cba]">
-            {section.label}
-          </p>
-          <h1 className="mt-5 text-4xl font-extrabold tracking-[-0.04em] text-[#1b1b1d] sm:text-5xl">
-            {card.title}
-          </h1>
-          <p className="mt-6 text-lg leading-relaxed text-[#414753]">
-            {card.summary}
-          </p>
-
-          <div className="mt-10 grid gap-5 sm:grid-cols-2">
-            <div className="rounded-[1.5rem] bg-[#f6f3f5] px-6 py-5">
-              <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#005cba]">
-                Content Type
-              </p>
-              <p className="mt-3 text-xl font-bold text-[#1b1b1d]">{card.tag}</p>
-            </div>
-            <div className="rounded-[1.5rem] bg-[#f6f3f5] px-6 py-5">
-              <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#005cba]">
-                Reference
-              </p>
-              <p className="mt-3 text-xl font-bold text-[#1b1b1d]">{card.meta}</p>
-            </div>
-          </div>
-
-          <div className="mt-10 rounded-[1.5rem] bg-[#f6f3f5] px-6 py-6">
-            <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#005cba]">
-              {card.noteTitle}
-            </p>
-            <div className="mt-4">{renderRichText(card.note)}</div>
-          </div>
-        </div>
-      </main>
-    </div>
-  );
-}
-
-function NewsletterSection() {
-  return (
-    <section className="relative mt-28 overflow-hidden rounded-[2rem] bg-[#f6f3f5] px-8 py-14 text-center md:px-16 md:py-24">
-      <div className="absolute top-0 right-0 h-64 w-64 translate-x-1/2 -translate-y-1/2 rounded-full bg-[#004e9f]/5 blur-3xl" />
-      <div className="absolute bottom-0 left-0 h-64 w-64 -translate-x-1/2 translate-y-1/2 rounded-full bg-[#b9cffd]/24 blur-3xl" />
-
-      <div className="relative z-10">
-        <h2 className="text-4xl font-extrabold tracking-[-0.04em] text-[#1b1b1d]">
-          让内容持续更新，也持续被看见。
-        </h2>
-        <p className="mx-auto mt-5 max-w-2xl text-base leading-8 text-[#414753]">
-          这里可以作为站点更新入口，持续推送新的讨论整理、VibeCoding 项目链接和 AI 教育文章，让主页本身成为你的内容索引。
-        </p>
-
-        <div className="mx-auto mt-10 flex max-w-2xl flex-col items-center justify-center gap-4 md:flex-row">
-          <div className="w-full rounded-full bg-white px-6 py-4 text-left text-sm text-[#727784] shadow-[0_12px_30px_rgba(27,27,29,0.04)] md:w-80">
-            输入邮箱或预留更新入口...
-          </div>
+        <div className="mt-10 flex flex-wrap gap-4">
+          <button onClick={() => onNavigate("teachers")} className="rounded-full bg-[#6d28d9] px-8 py-3.5 text-[14px] font-semibold text-white hover:bg-[#5b21b6] transition-colors">
+            探索教师服务 →
+          </button>
+          <button onClick={() => onNavigate("students")} className="rounded-full border border-[#d4cfc8] px-8 py-3.5 text-[14px] font-semibold text-[#6b6b7b] hover:bg-[#eeeae4] hover:text-[#1a1a2e] transition-colors">
+            查看学生课程
+          </button>
           <button
-            type="button"
-            className="w-full rounded-full bg-[linear-gradient(135deg,#004e9f,#0066cc)] px-10 py-4 text-sm font-bold tracking-[0.04em] text-white shadow-[0_18px_40px_rgba(0,92,186,0.18)] transition-transform hover:scale-[1.02] active:scale-95 md:w-auto"
+            onClick={() => onNavigate("resources")}
+            className="rounded-full border border-[#d4cfc8] px-8 py-3.5 text-[14px] font-semibold text-[#6b6b7b] hover:bg-[#eeeae4] hover:text-[#1a1a2e] transition-colors"
           >
-            订阅更新
+            查看资源库
           </button>
         </div>
       </div>
@@ -392,62 +169,326 @@ function NewsletterSection() {
   );
 }
 
-function Footer() {
+function PhotoStrip() {
+  const [offset, setOffset] = useState(0);
+  const visible = 3;
+  const max = PHOTOS.length - visible;
+  const containerRef = useRef(null);
+  const lockRef = useRef(false);
+  const GAP = 6;
+
+  const prev = () => setOffset((o) => Math.max(0, o - 1));
+  const next = () => setOffset((o) => Math.min(max, o + 1));
+
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+    const onWheel = (e) => {
+      const isHorizontal = Math.abs(e.deltaX) >= Math.abs(e.deltaY);
+      if (!isHorizontal) return;
+      e.preventDefault();
+      if (lockRef.current) return;
+      if (e.deltaX > 20) {
+        setOffset((o) => Math.min(max, o + 1));
+        lockRef.current = true;
+        setTimeout(() => { lockRef.current = false; }, 550);
+      } else if (e.deltaX < -20) {
+        setOffset((o) => Math.max(0, o - 1));
+        lockRef.current = true;
+        setTimeout(() => { lockRef.current = false; }, 550);
+      }
+    };
+    el.addEventListener("wheel", onWheel, { passive: false });
+    return () => el.removeEventListener("wheel", onWheel);
+  }, [max]);
+
   return (
-    <footer className="mt-20 bg-[linear-gradient(180deg,transparent,#f6f3f5)] px-6 py-12 sm:px-8 lg:px-12">
-      <div className="mx-auto flex max-w-[1440px] flex-col items-center justify-between gap-6 md:flex-row">
-        <div className="text-lg font-bold tracking-[-0.03em] text-[#1b1b1d]">
-          Knowledge Gallery
+    <div ref={containerRef} className="relative overflow-hidden bg-[#f4f1eb] px-5 py-4">
+      <div
+        className="flex transition-transform duration-500 ease-in-out"
+        style={{
+          gap: `${GAP}px`,
+          transform: `translateX(calc(-${(offset / PHOTOS.length) * 100}% - ${offset * GAP / PHOTOS.length}px))`,
+          width: `${(PHOTOS.length / visible) * 100}%`,
+        }}
+      >
+        {PHOTOS.map((p, i) => (
+          <div
+            key={i}
+            className="overflow-hidden rounded-lg flex-shrink-0"
+            style={{ width: `calc(${100 / PHOTOS.length}% - ${GAP * (PHOTOS.length - 1) / PHOTOS.length}px)`, aspectRatio: "16/9" }}
+          >
+            <img src={p.src} alt={p.alt} className="w-full h-full object-cover" />
+          </div>
+        ))}
+      </div>
+      <button onClick={prev} disabled={offset === 0} className="absolute left-7 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-white/90 shadow flex items-center justify-center text-[#1a1a2e] text-sm font-bold hover:bg-white transition-colors disabled:opacity-25 disabled:cursor-not-allowed">←</button>
+      <button onClick={next} disabled={offset >= max} className="absolute right-7 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-white/90 shadow flex items-center justify-center text-[#1a1a2e] text-sm font-bold hover:bg-white transition-colors disabled:opacity-25 disabled:cursor-not-allowed">→</button>
+    </div>
+  );
+}
+
+function Services({ onNavigate }) {
+  return (
+    <div className="grid grid-cols-1 md:grid-cols-3 border-t border-[#e8e4df] bg-[#faf9f6]">
+      {SERVICES.map((s, i) => (
+        <div
+          key={s.title}
+          className={`p-8 lg:p-12 ${i < 2 ? "md:border-r border-[#e8e4df]" : ""} border-b md:border-b-0 border-[#e8e4df] hover:bg-[#f4f1eb] transition-colors group`}
+        >
+          <span className="text-[#c4b5fd] text-2xl">{s.symbol}</span>
+          <h3 className="mt-5 text-xl font-extrabold text-[#1a1a2e]">{s.title}</h3>
+          <p className="mt-4 text-[#6b6b7b] text-[14px] leading-relaxed">{s.desc}</p>
+          <button
+            onClick={() => s.page && onNavigate(s.page)}
+            className="mt-6 text-[13px] font-semibold text-[#6d28d9] hover:text-[#5b21b6] transition-colors"
+          >
+            {s.cta}
+          </button>
         </div>
-        <div className="flex flex-wrap justify-center gap-8 text-sm text-[#727784]">
-          <a href="#">讨论整理</a>
-          <a href="#">项目索引</a>
-          <a href="#">文章归档</a>
-          <a href="#">关于本站</a>
+      ))}
+    </div>
+  );
+}
+
+function Footer({ onNavigate }) {
+  return (
+    <footer className="bg-[#f4f1eb] border-t border-[#e8e4df] px-6 py-12 sm:px-10 lg:px-14">
+      <div className="mx-auto max-w-[1440px] flex flex-col md:flex-row items-center justify-between gap-6">
+        <div className="flex items-center gap-2">
+          <StarIcon size={22} />
+          <span className="text-sm font-bold text-[#3d3d52]">飞星计划 AI 教育</span>
         </div>
-        <div className="text-sm text-[#727784] opacity-70">
-          A curated home for discussion notes, VibeCoding projects, and AI education writing.
+        <div className="flex flex-wrap justify-center gap-8 text-sm text-[#9b9bac]">
+          <button onClick={() => onNavigate("teachers")} className="hover:text-[#1a1a2e] transition-colors">教师服务</button>
+          <button onClick={() => onNavigate("students")} className="hover:text-[#1a1a2e] transition-colors">学生课程</button>
+          <button onClick={() => onNavigate("resources")} className="hover:text-[#1a1a2e] transition-colors">资源库</button>
+          <button onClick={() => onNavigate("about")} className="hover:text-[#1a1a2e] transition-colors">关于我们</button>
         </div>
+        <p className="text-xs text-[#c4bdb5]">© 2026 飞星计划 AI 教育</p>
       </div>
     </footer>
   );
 }
 
-export default function App() {
-  const detailEntry = useMemo(() => findCardFromLocation(), []);
-  const [activeTab, setActiveTab] = useState(tabs[0].id);
-  const currentTab = useMemo(
-    () => tabs.find((tab) => tab.id === activeTab) ?? tabs[0],
-    [activeTab],
+// ─── 占位页面 ─────────────────────────────────────────────
+function PlaceholderPage({ title, onNavigate }) {
+  return (
+    <div className="min-h-screen bg-[#faf9f6]">
+      <div className="pt-24 pb-0 px-6 sm:px-10 lg:px-14">
+        <div className="mx-auto max-w-[1440px]">
+          <div className="flex items-center gap-2 text-sm text-[#9b9bac]">
+            <button onClick={() => onNavigate("home")} className="hover:text-[#6d28d9] transition-colors">首页</button>
+            <span>/</span>
+            <span className="text-[#1a1a2e] font-medium">{title}</span>
+          </div>
+        </div>
+      </div>
+      <div className="px-6 pt-8 pb-12 sm:px-10 lg:px-14 border-b border-[#e8e4df]">
+        <div className="mx-auto max-w-[1440px]">
+          <h1 className="text-4xl md:text-5xl font-extrabold text-[#1a1a2e] tracking-[-0.02em]">{title}</h1>
+        </div>
+      </div>
+      <div className="px-6 py-24 sm:px-10 lg:px-14 flex items-center justify-center">
+        <div className="text-center text-[#c4bdb5]">
+          <p className="text-5xl mb-6">✦</p>
+          <p className="text-lg font-medium">待补充内容</p>
+          <p className="mt-2 text-sm">此页面正在建设中，敬请期待</p>
+        </div>
+      </div>
+    </div>
   );
+}
 
-  if (detailEntry) {
-    return <DetailPage section={detailEntry.section} card={detailEntry.card} />;
-  }
+// ─── 资源库页面 ───────────────────────────────────────────
+function extractBvid(url) {
+  const m = url.match(/\/video\/(BV\w+)/);
+  return m ? m[1] : null;
+}
+
+function SessionCard({ session }) {
+  const [info, setInfo] = useState(null);
+  const [editing, setEditing] = useState(false);
+  const bvid = extractBvid(session.url);
+  const storageKey = `desc_${bvid}`;
+
+  const [customDesc, setCustomDesc] = useState(
+    () => localStorage.getItem(storageKey) ?? ""
+  );
+  const [draft, setDraft] = useState("");
+
+  useEffect(() => {
+    if (!bvid) return;
+    fetch(`/bili-api/x/web-interface/view?bvid=${bvid}`)
+      .then((r) => r.json())
+      .then((json) => {
+        if (json.code === 0) {
+          setInfo({
+            pic: json.data.pic.replace("http://", "https://"),
+            desc: json.data.desc,
+          });
+        }
+      })
+      .catch(() => {});
+  }, [bvid]);
+
+  const startEdit = (e) => {
+    e.preventDefault();
+    setDraft(customDesc || info?.desc || session.desc || "");
+    setEditing(true);
+  };
+
+  const save = (e) => {
+    e.preventDefault();
+    localStorage.setItem(storageKey, draft);
+    setCustomDesc(draft);
+    setEditing(false);
+  };
+
+  const cancel = (e) => {
+    e.preventDefault();
+    setEditing(false);
+  };
+
+  const displayDesc = customDesc || info?.desc || session.desc || "";
 
   return (
-    <div className="min-h-screen bg-[#fcf8fb] text-[#1b1b1d]">
-      <Header activeTab={activeTab} onChange={setActiveTab} />
+    <div className="group bg-white border border-[#e8e4df] rounded-2xl overflow-hidden hover:border-[#c4b5fd] hover:shadow-md transition-all flex flex-col">
+      {/* 封面 */}
+      <a href={session.url} target="_blank" rel="noreferrer" className="block relative aspect-video bg-[#ede9fe] shrink-0">
+        {info?.pic ? (
+          <img src={info.pic} alt={session.title} referrerPolicy="no-referrer" className="w-full h-full object-cover" />
+        ) : (
+          <div className="w-full h-full flex items-center justify-center">
+            <span className="text-[#c4b5fd] text-4xl animate-pulse">▶</span>
+          </div>
+        )}
+        <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors flex items-center justify-center">
+          <div className="w-12 h-12 rounded-full bg-white/80 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity shadow-md">
+            <span className="text-[#6d28d9] text-lg pl-0.5">▶</span>
+          </div>
+        </div>
+      </a>
 
-      <main className="mx-auto max-w-[1440px] px-6 pt-44 pb-24 sm:px-8 lg:px-12">
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={currentTab.id}
-            initial={{ opacity: 0, y: 18 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -18 }}
-            transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-            className="space-y-14"
-          >
-            <HeroPanel tab={currentTab} />
-            <GallerySection sectionId={currentTab.id} cards={currentTab.cards} />
-          </motion.div>
-        </AnimatePresence>
+      {/* 文字区 */}
+      <div className="p-5 flex flex-col flex-1">
+        <p className="text-[11px] font-bold text-[#9b9bac] tracking-widest mb-2">{session.date}</p>
+        {session.series && (
+          <p className="text-[11px] font-bold text-[#9b9bac] tracking-widest mb-1">{session.series}</p>
+        )}
+        <a href={session.url} target="_blank" rel="noreferrer">
+          <h3 className="text-[15px] font-bold text-[#1a1a2e] hover:text-[#6d28d9] transition-colors leading-snug">
+            {session.title}
+          </h3>
+        </a>
 
-        <NewsletterSection />
-      </main>
+        {/* 简介区 */}
+        <div className="mt-3 flex-1">
+          {editing ? (
+            <div>
+              <textarea
+                value={draft}
+                onChange={(e) => setDraft(e.target.value)}
+                className="w-full text-[12px] text-[#1a1a2e] leading-relaxed border border-[#c4b5fd] rounded-lg p-2.5 resize-none focus:outline-none focus:ring-2 focus:ring-[#c4b5fd]"
+                rows={6}
+                autoFocus
+              />
+              <div className="flex gap-2 mt-2">
+                <button onClick={save} className="px-4 py-1.5 rounded-full bg-[#6d28d9] text-white text-[12px] font-semibold hover:bg-[#5b21b6] transition-colors">保存</button>
+                <button onClick={cancel} className="px-4 py-1.5 rounded-full border border-[#d4cfc8] text-[12px] text-[#6b6b7b] hover:bg-[#f4f1eb] transition-colors">取消</button>
+              </div>
+            </div>
+          ) : (
+            <p className="text-[12px] text-[#6b6b7b] leading-relaxed">
+              {displayDesc}
+            </p>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
 
-      <Footer />
+function ResourcesPage({ onNavigate }) {
+  return (
+    <div className="min-h-screen bg-[#faf9f6]">
+      {/* 面包屑 */}
+      <div className="pt-24 pb-0 px-6 sm:px-10 lg:px-14">
+        <div className="mx-auto max-w-[1440px]">
+          <div className="flex items-center gap-2 text-sm text-[#9b9bac]">
+            <button onClick={() => onNavigate("home")} className="hover:text-[#6d28d9] transition-colors">首页</button>
+            <span>/</span>
+            <span className="text-[#1a1a2e] font-medium">资源库</span>
+          </div>
+        </div>
+      </div>
+
+      {/* 页头 */}
+      <div className="px-6 pt-8 pb-12 sm:px-10 lg:px-14 border-b border-[#e8e4df]">
+        <div className="mx-auto max-w-[1440px]">
+          <h1 className="text-4xl md:text-5xl font-extrabold text-[#1a1a2e] tracking-[-0.02em]">资源库</h1>
+          <p className="mt-4 text-[#6b6b7b] text-lg max-w-2xl">
+            精选 AI 教育资源，持续更新，开放共享。
+          </p>
+        </div>
+      </div>
+
+      {/* 内容区 */}
+      <div className="px-6 py-14 sm:px-10 lg:px-14">
+        <div className="mx-auto max-w-[1440px]">
+
+          {/* 教育者社群线上分享 */}
+          <section>
+            <div className="flex items-baseline gap-4 mb-8">
+              <h2 className="text-2xl font-extrabold text-[#1a1a2e]">教育者社群线上分享</h2>
+              <span className="text-sm text-[#9b9bac]">往期线上分享视频回放</span>
+            </div>
+
+            {COMMUNITY_SESSIONS.length > 0 ? (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {COMMUNITY_SESSIONS.map((s, i) => (
+                  <SessionCard key={i} session={s} />
+                ))}
+              </div>
+            ) : (
+              <div className="border border-dashed border-[#d4cfc8] rounded-2xl px-8 py-14 text-center text-[#9b9bac]">
+                <p className="text-4xl mb-4">▶</p>
+                <p className="text-sm">即将上线，敬请期待</p>
+              </div>
+            )}
+          </section>
+
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ─── 主应用 ───────────────────────────────────────────────
+export default function App() {
+  const [page, setPage] = useState("home");
+
+  const navigate = (target) => {
+    setPage(target);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  return (
+    <div className="min-h-screen bg-[#faf9f6] text-[#1a1a2e]">
+      <Header onNavigate={navigate} />
+      {page === "home" && (
+        <main>
+          <Hero onNavigate={navigate} />
+          <PhotoStrip />
+          <Services onNavigate={navigate} />
+        </main>
+      )}
+      {page === "resources" && <ResourcesPage onNavigate={navigate} />}
+      {page === "teachers" && <PlaceholderPage title="教师服务" onNavigate={navigate} />}
+      {page === "students" && <PlaceholderPage title="学生课程" onNavigate={navigate} />}
+      {page === "about" && <PlaceholderPage title="关于我们" onNavigate={navigate} />}
+      {page === "contact" && <PlaceholderPage title="联系我们" onNavigate={navigate} />}
+      <Footer onNavigate={navigate} />
     </div>
   );
 }
