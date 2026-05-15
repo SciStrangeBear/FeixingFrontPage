@@ -45,6 +45,14 @@ const SERVICES = [
 // 在这里添加教育者社群线上分享的视频回放
 const COMMUNITY_SESSIONS = [
   {
+    series: "三棵人 AI 教育探索第 6 期",
+    title: "AI 编程 Vibe Coding：如何找需求 + 案例分享（零基础友好）",
+    date: "2026.5.14",
+    desc: "本期分享嘉宾龙哥（安瑟 A11BERICH）在做教育之前有14年互联网行业经验，他将分享他在青少年 AI 创新教育中的实践：用\"三不原则\"发现需求，通过用户反馈打磨产品方案，以及用 Spec-Driven Development 提升 AI 编程效率。零基础友好。",
+    thumbnail: "https://i0.hdslb.com/bfs/archive/ff742aea35a091a9baafe7ec05d173a6ea7d87a2.jpg",
+    url: "https://www.bilibili.com/video/BV1Uv5e67E3E/?vd_source=56d2df97d35fd0e11523af88d7d403ae",
+  },
+  {
     series: "三棵人 AI 教育探索第 5 期",
     title: "教师如何用 AI 提效：从 Vibe Coding 到 Skill+Agent 案例分享",
     date: "2026.4.30",
