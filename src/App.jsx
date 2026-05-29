@@ -45,6 +45,14 @@ const SERVICES = [
 // 在这里添加教育者社群线上分享的视频回放
 const COMMUNITY_SESSIONS = [
   {
+    series: "三棵人 AI 教育探索第 7 期",
+    title: "一人公司（OPC）实战分享和现场答疑",
+    date: "2026.5.28",
+    desc: "本期我们邀请到教育者 / 一人公司实践者安瑟 A11BERICH（龙哥），分享他自己一人公司的案例，拆解一人公司的本质与隐形风险，以及介绍普通人如何找到自己的赛道定位、形成自己的商业模式。视频后半段是现场答疑互动，干货满满，适合所有想了解 AI 时代职业新可能的朋友观看。",
+    thumbnail: "https://i1.hdslb.com/bfs/archive/3216d8b3c8c41d6ba5839f24d267eeac1e15eb86.jpg",
+    url: "https://www.bilibili.com/video/BV1JcVY6ZESJ/?vd_source=56d2df97d35fd0e11523af88d7d403ae",
+  },
+  {
     series: "三棵人 AI 教育探索第 6 期",
     title: "AI 编程 Vibe Coding：如何找需求 + 案例分享（零基础友好）",
     date: "2026.5.14",
