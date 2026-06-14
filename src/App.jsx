@@ -45,6 +45,14 @@ const SERVICES = [
 // 在这里添加教育者社群线上分享的视频回放
 const COMMUNITY_SESSIONS = [
   {
+    series: "三棵人 AI 教育探索第 8 期",
+    title: "用 AI Agent 与 Skill 支持教学与日常工作",
+    date: "2026.6.11",
+    desc: "AI教育者张绪东老师带你从\"AI 网页对话\"迈向能自主干活的 AI Agent：讲清 Agent 与 Skill 是什么、Codex/Claude Code/WorkBuddy 怎么选，并通过案例演示如何用Agent与Skill来支持教学与日常工作。\n案例包括：自动填报销单、把方法论书籍\"蒸馏\"成 Skill、利用ima知识库设计群文阅读课教案等。\n适合想用 AI 真正提效的人群，尤其适合教育工作者。",
+    thumbnail: "https://i1.hdslb.com/bfs/archive/a1bef7ebb0d4e7043889491ead6ca2ca0c72df8d.jpg",
+    url: "https://www.bilibili.com/video/BV1UdJF6YE6Y/?vd_source=56d2df97d35fd0e11523af88d7d403ae",
+  },
+  {
     series: "三棵人 AI 教育探索第 7 期",
     title: "一人公司（OPC）实战分享和现场答疑",
     date: "2026.5.28",
