@@ -45,6 +45,14 @@ const SERVICES = [
 // 在这里添加教育者社群线上分享的视频回放
 const COMMUNITY_SESSIONS = [
   {
+    series: "三棵人 AI 教育探索第 9 期",
+    title: "教师如何沉淀自己的 AI 备课工作流：将 Agent + Skill 用进课程设计",
+    date: "2026.7.9",
+    desc: "AI教育者刘天晗老师分享如何把 AI 真正用进课程设计：从一次备课调研出发，梳理自己的课程设计流程，并尝试将其中可复用的部分沉淀成 Skill。\n\n本期会介绍 Codex + Obsidian 的 AI 协作工作台，也会通过真实案例展示：如何从对话中形成课程初步设想、开展课程调研、生成课程框架，并进一步复用这些 Skill 设计新的课程。\n\n适合想用 AI 辅助备课、课程设计和教学材料开发的老师，也适合对 Agent、Skill 和 AI 工作流感兴趣的教育工作者。",
+    thumbnail: "https://i0.hdslb.com/bfs/archive/6fb84620ea0f839baaac5231a80dfe0675ac8282.jpg",
+    url: "https://www.bilibili.com/video/BV1gPNj6VE88/?vd_source=56d2df97d35fd0e11523af88d7d403ae",
+  },
+  {
     series: "三棵人 AI 教育探索第 8 期",
     title: "用 AI Agent 与 Skill 支持教学与日常工作",
     date: "2026.6.11",
