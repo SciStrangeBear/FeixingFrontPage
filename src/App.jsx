@@ -392,7 +392,7 @@ function SessionCard({ session }) {
             rel="noreferrer"
             className="mt-4 inline-flex w-fit items-center text-[12px] font-bold text-[#6d28d9] hover:text-[#4c1d95] transition-colors"
           >
-            分享讲义 →
+            飞书讲义 →
           </a>
         )}
       </div>
