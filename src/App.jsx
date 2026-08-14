@@ -45,6 +45,15 @@ const SERVICES = [
 // 在这里添加教育者社群线上分享的视频回放
 const COMMUNITY_SESSIONS = [
   {
+    series: "三棵人 AI 教育探索第 10 期",
+    title: "教师如何搭建个性化 AI 备课工作流：从通用 Skill 到课程设计闭环",
+    date: "2026.8.13",
+    desc: "这一期承接第9期，继续讨论怎样把 Agent 和 Skill 真正用进课程设计：从课程框架形成课时教案，再生成教学资料、记录真实课堂、完成课后复盘，并让复盘继续影响下一节课的备课。\n前半部分用 Anthropic 的 K–12 Teacher Skills 这个通用备课 Skill 进行测试，看看通用 Skill 能做什么，又有哪些适用边界。\n后半部分分享我自己设计课程时的真实做法：如何让 Codex、WorkBuddy 与 Obsidian、飞书和腾讯会议记录配合，使课程框架、课时教案、网页课件、学生作业和课堂复盘在同一个文件体系中持续流转。\n配套飞书讲义：https://my.feishu.cn/docx/P1hydNvytoMp0qxRc7fc1gBHnBf",
+    thumbnail: "https://i0.hdslb.com/bfs/archive/5348fa751cbf89607f6aba598531386df29f7d9c.jpg",
+    url: "https://www.bilibili.com/video/BV1ZYgK6gEbD/?vd_source=56d2df97d35fd0e11523af88d7d403ae",
+    materialUrl: "https://my.feishu.cn/docx/P1hydNvytoMp0qxRc7fc1gBHnBf",
+  },
+  {
     series: "三棵人 AI 教育探索第 9 期",
     title: "教师如何沉淀自己的 AI 备课工作流：将 Agent + Skill 用进课程设计",
     date: "2026.7.9",
