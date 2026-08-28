@@ -45,6 +45,15 @@ const SERVICES = [
 // 在这里添加教育者社群线上分享的视频回放
 const COMMUNITY_SESSIONS = [
   {
+    series: "三棵人 AI 教育探索第 11 期",
+    title: "用 AI 制作教学课件：通用工作流与数理学科可视化",
+    date: "2026.8.27",
+    desc: "本期三棵人 AI 教育探索线上分享，三位老师从通用工作流与数理学科实践两个方向，分享如何借助 AI 制作教学课件和视觉化资料。\n\n刘天晗老师介绍使用 Codex、WorkBuddy 与 Skill 制作网页版课件、PPT 和互动视觉资料的工作流，并讨论课件在教学设计中的位置，以及 AI 是否真的减少了教师的工作量。Maggie老师 分享如何从经过教师确认的 lesson plan 出发，借助自建 Gamma guideline 制作和精修双语数学课件。张绪东老师以扫描版数学试卷转 PPT 为例，演示先用 MinerU 或 Mathpix 将 PDF 转为 LaTeX，再交给 Agent 生成课件的过程。",
+    resources: "【通用Agent】\nWorkBuddy / Codex\n\n【Skill】\n- 企鹅教师助手（WorkBuddy 专家功能）—— WorkBuddy 中面向教育教学场景的专家，本期调用其中的“课件设计专家”，根据教案生成课堂课件。\n- Claude K12 Lesson Planning Skill（GitHub 安装仓库）：https://github.com/anthropics/k12-teacher-skills —— Anthropic 开源的 K–12 单节课设计 Skill，可生成教案、学生材料和课堂观察材料。\n\n【课件与互动视觉】\n\n- Gamma：https://gamma.app/ —— 可由提示词、提纲或已有文本生成演示文稿，并支持逐页编辑与导出。\n- Excalidraw：https://excalidraw.com/ —— 手绘风格的在线白板与图示工具，本期用来呈现分享结构和工作流程。\n- 飞象老师：https://www.feixianglaoshi.com/ —— 汇集教学动画、教学游戏和互动课件案例，可用于课堂演示和内容改编。\n- Padlet：https://padlet.com/ —— 视觉化协作墙，适合收集、整理和展示学生作品与观点。\n- Mentimeter：https://www.mentimeter.com/ —— 支持实时投票、词云、测验和问答的课堂与培训互动工具。\n- Kahoot!：https://kahoot.com/ —— 游戏化课堂测验工具，可提供即时答题反馈和积分展示。\n- 飞书妙搭：https://miaoda.feishu.cn/ —— 飞书的 AI 应用搭建平台，本期用作网页版课件的快速上线与分享入口。\n\n【数理资料处理】\n\n- MinerU：https://mineru.net/ —— 面向 Agent 的文档解析平台，可把 PDF、图片等资料转换为 Markdown、JSON 或 LaTeX。\n- Mathpix：https://mathpix.com/ —— 面向数学与科学内容的 OCR 和文档转换工具，可识别公式并将 PDF 或图片转换为 LaTeX、Markdown 等格式。\n- LaTeX：https://www.latex-project.org/ —— 适合技术与科学文档、数学公式和严格排版的文档准备系统，本期将其作为方便 Agent 读取的中间格式。\n- Overleaf：https://www.overleaf.com/ —— 在线 LaTeX 编辑与协作平台，可直接在浏览器中查看、编辑和编译 LaTeX 文档。",
+    thumbnail: "https://i0.hdslb.com/bfs/archive/b642027c71cb66dbf76dd9f5fe5618b8b51d3295.jpg",
+    url: "https://www.bilibili.com/video/BV1eqtP6rECp/?vd_source=56d2df97d35fd0e11523af88d7d403ae",
+  },
+  {
     series: "三棵人 AI 教育探索第 10 期",
     title: "教师如何搭建个性化 AI 备课工作流：从通用 Skill 到课程设计闭环",
     date: "2026.8.13",
@@ -394,6 +403,16 @@ function SessionCard({ session }) {
         <p className="mt-3 text-[12px] text-[#6b6b7b] leading-relaxed">
           {session.desc}
         </p>
+        {session.resources && (
+          <details className="mt-4 rounded-lg border border-[#e8e4df] bg-[#faf9f6] px-3 py-2 text-[12px] text-[#6b6b7b]">
+            <summary className="cursor-pointer font-bold text-[#6d28d9] hover:text-[#4c1d95]">
+              视频中提到的主要工具与资源
+            </summary>
+            <div className="mt-3 whitespace-pre-line leading-relaxed">
+              {session.resources}
+            </div>
+          </details>
+        )}
         {session.materialUrl && (
           <a
             href={session.materialUrl}
