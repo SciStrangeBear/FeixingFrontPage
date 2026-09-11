@@ -47,7 +47,7 @@ const COMMUNITY_SESSIONS = [
   {
     series: "三棵人 AI 教育探索第 12 期",
     title: "学生 AI 课程可以怎么上？实操案例分享",
-    date: "2026.9.11",
+    date: "2026.9.10",
     desc: "本期讨论学校与教育机构可以怎样开设学生 AI 课程。\n\n我结合自己开发和实际实施过的五个课程案例，梳理 Learn about AI 与 Learn with AI 两种课程取向。案例包括 AI 通识课、低设备环境下的不插电 AI 课程、AI 创意实验室、AI for Good 青少年AI社会创新课程等；同时也分享学科融合与 AI 游戏设计营的实践。\n\n分享中还会介绍 Code.org、MIT Day of AI、Stanford CRAFT 等可供教师继续探索的 AI 课程资源。",
     thumbnail: "https://i0.hdslb.com/bfs/archive/690dd38b4ff1260ceceb3ff9339f78d8d4013e24.jpg",
     url: "https://www.bilibili.com/video/BV1ZbY26yEUc/?vd_source=56d2df97d35fd0e11523af88d7d403ae",
