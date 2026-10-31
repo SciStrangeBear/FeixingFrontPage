@@ -45,6 +45,38 @@ const SERVICES = [
 // 在这里添加教育者社群线上分享的视频回放
 const COMMUNITY_SESSIONS = [
   {
+    series: "三棵人 AI 教育探索第 13 期 ①",
+    title: "运用 WorkBuddy 制作教学材料",
+    date: "2026.10.28",
+    desc: "教学中有了想法，怎样把它做成学生真正能用的材料？这一段分享展示了Ellen老师用 WorkBuddy 制作词汇学习网站、互动练习、学习卡片、项目式学习资料的过程。案例来自数学课堂，做法也可供其他学科借鉴。",
+    thumbnail: "https://i0.hdslb.com/bfs/archive/3384ab36ba599f7bf2969286a2909ec0b1aa901e.jpg",
+    url: "https://www.bilibili.com/video/BV1EUx16tE8D/",
+  },
+  {
+    series: "三棵人 AI 教育探索第 13 期 ②",
+    title: "运用 WorkBuddy 接手教师重复性工作",
+    date: "2026.10.28",
+    desc: "多个班级的作品、照片和课堂记录，怎样减少反复上传与整理的时间？这一段分享展示了韩扬老师用 WorkBuddy 协助处理 Padlet、ClassDojo 和飞书中的重复操作。视频也展示了如何运用 WorkBuddy 制作地理经纬度、历史时间轴等互动游戏。",
+    thumbnail: "https://i1.hdslb.com/bfs/archive/d338a704668954eec9636bea8e405cd19380a736.jpg",
+    url: "https://www.bilibili.com/video/BV1J2x16fEsb/",
+  },
+  {
+    series: "三棵人 AI 教育探索第 13 期 ③",
+    title: "WorkBuddy 实操：AI 备课流程",
+    date: "2026.10.28",
+    desc: "这段分享中，奶糖老师展示了她的 WorkBuddy 备课工作流程：从设计课程大纲、教案，到最终的互动课件制作。她还细致介绍了如何用交接文档衔接不同设备上的工作。视频重点是怎样让 AI 辅助备课，同时保留教师对课堂内容、节奏和呈现方式的判断。",
+    thumbnail: "https://i0.hdslb.com/bfs/archive/9715f3ab1a78ab80e70c9b8cc72ba1b691472c42.jpg",
+    url: "https://www.bilibili.com/video/BV1R5x16DE6t/",
+  },
+  {
+    series: "三棵人 AI 教育探索第 13 期 ④",
+    title: "把 WorkBuddy 专家团和 Skill 用到教学中",
+    date: "2026.10.28",
+    desc: "WorkBuddy 里已有的专家团和 Skill，可以怎样进入真实教学？这一段分享中，杨睿昕老师展示了如何调用蒸馏 Skill，结合资料设计情境练习，让学生与 AI 模拟角色对话并获得反馈。她还介绍了用现成专家技能把知识点做成互动游戏，以及借助专家团分析试卷、规划讲评与分层作业。",
+    thumbnail: "https://i2.hdslb.com/bfs/archive/8b81943c941bc985c38cadf518581f220e99bb84.jpg",
+    url: "https://www.bilibili.com/video/BV1V7x16UEJV/",
+  },
+  {
     series: "三棵人 AI 教育探索第 12 期",
     title: "学生 AI 课程可以怎么上？实操案例分享",
     date: "2026.9.10",
