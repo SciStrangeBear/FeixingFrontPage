@@ -48,7 +48,7 @@ const COMMUNITY_SESSIONS = [
     series: "三棵人 AI 教育探索第 14 期",
     title: "AI原住民在玩什么？一位休学少年的AI实践与成长故事",
     date: "2026.11.19",
-    desc: "我们这些大人，常常在操心教育、操心 AI、操心下一代。在「三棵人 AI 教育探索」第 14 期线上分享里，我们不想再陷入大人们的争论，想听一位年轻朋友讲一讲，AI 原住民们到底在玩什么？他们和 AI 的关系是怎样的？\n\n本期分享嘉宾是刚满18 岁的柳懿宸，他目前参与成都好奇学习社区 AI 项目。他展示了用 DeepSeek Harness 做的炫酷的 AI 项目，也聊了自己怎样把脑海里的想法一步步做出来。\n\n在对话中，他也回顾了休学经历，分享了 AI 如何帮助自己表达想法、推进项目和与人交流，也谈到兴趣与坚持、父母和学校、AI 与现实关系。\n\n原本以为这是一场关于 AI 工具的分享，结果整整 90 分钟里，评论区不断刷屏“要哭了”、“金句太多了”、“强烈建议出文字稿”。希望懿宸的分享也能够给你带来关于AI，关于教育的新思考。",
+    desc: "本期分享嘉宾是刚满18 岁的柳懿宸，他目前参与成都好奇学习社区 AI 项目。他展示了用 DeepSeek Harness 做的炫酷的 AI 项目，也聊了自己怎样把脑海里的想法一步步做出来。\n\n在对话中，他也回顾了休学经历，分享了 AI 如何帮助自己表达想法、推进项目和与人交流，也谈到兴趣与坚持、父母和学校、AI 与现实关系。\n\n原本以为这是一场关于 AI 工具的分享，结果整整 90 分钟里，评论区不断刷屏“要哭了”、“金句太多了”、“强烈建议出文字稿”。希望懿宸的分享也能够给你带来关于AI，关于教育的新思考。",
     thumbnail: "https://i1.hdslb.com/bfs/archive/2fdfdece25522263233fae69220d15da7b332184.jpg",
     url: "https://www.bilibili.com/video/BV1KgsB67E4L/",
   },
@@ -449,7 +449,7 @@ function SessionCard({ session }) {
             {session.title}
           </h3>
         </a>
-        <p className="mt-3 text-[12px] text-[#6b6b7b] leading-relaxed">
+        <p className="mt-3 whitespace-pre-line text-[12px] text-[#6b6b7b] leading-relaxed">
           {session.desc}
         </p>
         {session.resources && (
